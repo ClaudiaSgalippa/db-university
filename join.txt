@@ -91,5 +91,6 @@ JOIN exam_student AS ES ON ES.student_id = S.id
 JOIN exams as E ON ES.exam_id = E.id
 GROUP BY S.name, S.surname, E.date, ES.exam_id, ES.vote
 
-
-
+-- USO DEL COUNT https://www.w3schools.com/sql/sql_count.asp
+-- USO DEL MAX https://www.w3schools.com/sql/sql_min_max.asp
+-- Da rivedere per completamento bonus
