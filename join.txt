@@ -6,7 +6,7 @@ FROM students AS S
 JOIN degrees AS D
 WHERE D.name = "Corso di Laurea in Economia"; -- IN QUESTO CASO ESCE 1000
 
-or
+-- or
 
 SELECT S.name AS nome_studente, S.surname AS cognome_studente, s.registration_number AS matricola_studente, d.name AS nome_del_corso
 FROM students AS S
@@ -24,7 +24,7 @@ JOIN departments AS DP
 WHERE DG.level = "magistrale"
 AND DP.name = "Dipartimento di Neuroscienze"; -- IN QUESTO CASO ESCE 38
 
-or
+-- or
 
 SELECT DG.name AS nome_del_corso, DP.name AS nome_dipartimento, DG.level AS tipo_di_laurea
 FROM degrees AS DG
@@ -77,12 +77,19 @@ JOIN course_teacher AS CT ON T.id = CT.teacher_id
 JOIN courses AS C ON CT.course_id = C.id
 JOIN degrees AS DG ON C.degree_id = DG.id
 JOIN departments AS DP ON DG.department_id = DP.id
-WHERE DP.name = "Dipartimento di Matematica"
+WHERE DP.name = "Dipartimento di Matematica";
 
 =================================================================================================================================================================
 
 -- 7. BONUS: Selezionare per ogni studente il numero di tentativi sostenuti per ogni esame, stampando anche il voto massimo.   
-          Successivamente, filtrare i tentativi con voto minimo 18.
+--           Successivamente, filtrare i tentativi con voto minimo 18.
+-- STUDENTS -> EXAM_STUDENT -> EXAMS
+
+SELECT S.surname AS cognome_studente, S.name AS nome_studente, E.date AS data_esame, ES.exam_id AS id_esame, ES.vote AS voto
+FROM students AS S
+JOIN exam_student AS ES ON ES.student_id = S.id
+JOIN exams as E ON ES.exam_id = E.id
+GROUP BY S.name, S.surname, E.date, ES.exam_id, ES.vote
 
 
 
