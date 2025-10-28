@@ -1,20 +1,24 @@
 -- 1. Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
+-- STUDENTS -> DEGREES
 
-SELECT S.name, S.surname, s.registration_number, d.name
+SELECT S.name AS nome_studente, S.surname AS cognome_studente, s.registration_number AS matricola_studente, d.name AS nome_del_corso
 FROM students AS S
 JOIN degrees AS D
 WHERE D.name = "Corso di Laurea in Economia"; -- IN QUESTO CASO ESCE 1000
 
 or
 
-SELECT S.name, S.surname, s.registration_number, d.name
+SELECT S.name AS nome_studente, S.surname AS cognome_studente, s.registration_number AS matricola_studente, d.name AS nome_del_corso
 FROM students AS S
 JOIN degrees AS D ON D.id = S.degree_id
 WHERE D.name = "Corso di Laurea in Economia";  -- IN QUESTO CASO ESCE 68
 
--- 2. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
+=================================================================================================================================================================
 
-SELECT DP.name, DG.name, DG.level
+-- 2. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
+-- DEGREES -> DEPARTMENTS
+
+SELECT DG.name AS nome_del_corso, DP.name AS nome_dipartimento, DG.level AS tipo_di_laurea
 FROM degrees AS DG
 JOIN departments AS DP
 WHERE DG.level = "magistrale"
@@ -22,45 +26,57 @@ AND DP.name = "Dipartimento di Neuroscienze"; -- IN QUESTO CASO ESCE 38
 
 or
 
-SELECT DP.name, DG.name, DG.level
+SELECT DG.name AS nome_del_corso, DP.name AS nome_dipartimento, DG.level AS tipo_di_laurea
 FROM degrees AS DG
 JOIN departments AS DP ON DP.id = DG.department_id
 WHERE DG.level = "magistrale"
 AND DP.name = "Dipartimento di Neuroscienze"; -- IN QUESTO CASO ESCE 1
 
--- 3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+=================================================================================================================================================================
 
-SELECT C.name, T.id, T.name, T.surname
+-- 3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+-- COURSES -> COURSE_TEACHER -> TEACHERS
+
+SELECT C.name AS nome_corso, T.id AS id_professore, T.name AS nome_professore, T.surname AS cognome_professore
 FROM courses AS C
 JOIN course_teacher AS CT ON C.id = CT.course_id
 JOIN teachers AS T ON T.id = CT.teacher_id
 WHERE T.id = 44; -- IN QUESTO CASO ESCE 11
 
+=================================================================================================================================================================
+
 -- 4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il relativo dipartimento, in ordine alfabetico per cognome e nome
 -- STUDENTS -> DEGREES -> DEPARTMENTS
 
-SELECT S.surname, S.name, s.registration_number, DG.name, DP.name
+SELECT S.surname AS cognome_studente, S.name AS nome_studente, s.registration_number AS numero_matricola, DG.name AS corso_di_laurea, DP.name AS nome_dipartimento
 FROM students AS S
 JOIN degrees AS DG ON S.degree_id = DG.id
 JOIN departments AS DP ON DG.department_id = DP.id
 ORDER BY S.surname, S.name;
 
+=================================================================================================================================================================
+
 -- 5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
 -- DEGREES -> COURSES -> COURSE_TEACHER -> TEACHERS
 
-SELECT DG.name, C.name, T.surname, T.name
+SELECT DG.name AS corso_di_laurea, C.name AS nome_corso, T.surname AS cognome_professore, T.name AS nome_professore
 FROM degrees AS DG
 JOIN courses AS C ON DG.id = C.degree_id 
 JOIN course_teacher As CT ON C.id = CT.course_id
 JOIN teachers AS T ON CT.teacher_id = T.id
 ORDER BY DG.name, C.name, T.surname, T.name;
 
-6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+=================================================================================================================================================================
+
+-- 6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+-- TEACHERS -> COURSE_TEACHER -> COURSES-> DEGREES -> DEPARTMENTS
 
 
 
+=================================================================================================================================================================
 
-7. BONUS: Selezionare per ogni studente il numero di tentativi sostenuti per ogni esame, stampando anche il voto massimo.   
+-- 7. BONUS: Selezionare per ogni studente il numero di tentativi sostenuti per ogni esame, stampando anche il voto massimo.   
           Successivamente, filtrare i tentativi con voto minimo 18.
+
 
 
