@@ -3,13 +3,6 @@
 
 SELECT S.name AS nome_studente, S.surname AS cognome_studente, s.registration_number AS matricola_studente, d.name AS nome_del_corso
 FROM students AS S
-JOIN degrees AS D
-WHERE D.name = "Corso di Laurea in Economia"; -- IN QUESTO CASO ESCE 1000
-
--- or
-
-SELECT S.name AS nome_studente, S.surname AS cognome_studente, s.registration_number AS matricola_studente, d.name AS nome_del_corso
-FROM students AS S
 JOIN degrees AS D ON D.id = S.degree_id
 WHERE D.name = "Corso di Laurea in Economia";  -- IN QUESTO CASO ESCE 68
 
@@ -17,14 +10,6 @@ WHERE D.name = "Corso di Laurea in Economia";  -- IN QUESTO CASO ESCE 68
 
 -- 2. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
 -- DEGREES -> DEPARTMENTS
-
-SELECT DG.name AS nome_del_corso, DP.name AS nome_dipartimento, DG.level AS tipo_di_laurea
-FROM degrees AS DG
-JOIN departments AS DP
-WHERE DG.level = "magistrale"
-AND DP.name = "Dipartimento di Neuroscienze"; -- IN QUESTO CASO ESCE 38
-
--- or
 
 SELECT DG.name AS nome_del_corso, DP.name AS nome_dipartimento, DG.level AS tipo_di_laurea
 FROM degrees AS DG
@@ -85,12 +70,12 @@ WHERE DP.name = "Dipartimento di Matematica";
 --           Successivamente, filtrare i tentativi con voto minimo 18.
 -- STUDENTS -> EXAM_STUDENT -> EXAMS
 
-SELECT S.surname AS cognome_studente, S.name AS nome_studente, E.date AS data_esame, ES.exam_id AS id_esame, ES.vote AS voto
+SELECT S.surname AS cognome_studente, S.name AS nome_studente, ES.exam_id AS id_esame,
+COUNT(*) AS numero_tentativi,
+MAX(ES.vote) AS voto_massimo
 FROM students AS S
 JOIN exam_student AS ES ON ES.student_id = S.id
-JOIN exams as E ON ES.exam_id = E.id
-GROUP BY S.name, S.surname, E.date, ES.exam_id, ES.vote
-
--- USO DEL COUNT https://www.w3schools.com/sql/sql_count.asp
--- USO DEL MAX https://www.w3schools.com/sql/sql_min_max.asp
--- Da rivedere per completamento bonus
+JOIN exams AS E ON ES.exam_id = E.id
+GROUP BY S.surname, S.name, ES.exam_id
+HAVING MAX(ES.vote) >= 18
+ORDER BY S.surname, S.name, ES.exam_id;
